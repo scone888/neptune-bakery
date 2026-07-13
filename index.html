@@ -1,107 +1,520 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neptune Bakery</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Neptune Bakery</title>
+  <style>
+    :root {
+      --bg: #f8fbff;
+      --surface: #ffffff;
+      --border: #dce8f4;
+      --text: #2f3d4a;
+      --muted: #6f7f8f;
+      --accent: #9dc7e8;
+      --accent-strong: #7eb4d8;
+      --shadow: 0 10px 30px rgba(95, 134, 165, 0.1);
+    }
 
-<style>
-body{
-    margin:0;
-    font-family:"Microsoft JhengHei",sans-serif;
-    background:#f7fbff;
-    color:#444;
-}
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Noto Sans TC", "PingFang TC", sans-serif;
+      background: linear-gradient(180deg, #fcfeff 0%, var(--bg) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px 14px 110px;
+    }
 
-.container{
-    max-width:500px;
-    margin:auto;
-    padding:30px;
-    text-align:center;
-}
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
 
-h1{
-    color:#7bb8e8;
-    letter-spacing:2px;
-}
+    .header {
+      text-align: center;
+      padding: 24px 18px 12px;
+      background: linear-gradient(135deg, #ffffff 0%, #f2f8ff 100%);
+      border-bottom: 1px solid var(--border);
+    }
 
-.subtitle{
-    color:#888;
-    margin-bottom:35px;
-}
+    .logo {
+    font-size:1.35rem;
+    font-weight:300;
+    letter-spacing:0.18em;
+    color:#74b7e8;
+    font-family:"Cormorant Garamond","Times New Roman",serif;
+    }
 
-.card{
-    background:white;
-    border-radius:20px;
-    padding:20px;
-    margin:18px 0;
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
-}
+    .subtext {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
 
-.btn{
-    display:block;
-    text-decoration:none;
-    padding:18px;
-    margin:15px 0;
-    border-radius:15px;
-    font-size:20px;
-    font-weight:bold;
-    color:white;
-}
+    .section-card {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
 
-.order{
-    background:#7cc7ff;
-}
+    .customer-form {
+      display: grid;
+      gap: 10px;
+    }
 
-.menu{
-    background:#8ecf9d;
-}
+    .field {
+      display: grid;
+      gap: 6px;
+    }
 
-.ig{
-    background:#ff8eb4;
-}
+    .field label {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
 
-.footer{
-    margin-top:40px;
-    color:#999;
-    font-size:14px;
-}
-</style>
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.96rem;
+      background: #fcfeff;
+      color: var(--text);
+      outline: none;
+    }
 
+    .field textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+
+    .category {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      background: #fcfeff;
+    }
+
+    .category-toggle {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .category-toggle .chevron {
+      transition: transform 0.2s ease;
+      color: var(--muted);
+    }
+
+    .category.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .category-body {
+      display: none;
+      padding: 0 12px 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .category.open .category-body {
+      display: block;
+    }
+
+    .item-row {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .item-row:last-child {
+      border-bottom: 0;
+    }
+
+    .item-name {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .item-price {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .qty-box {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .qty-btn {
+      border: 0;
+      background: transparent;
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+      color: var(--accent-strong);
+      cursor: pointer;
+    }
+
+    .qty-value {
+      min-width: 24px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .summary-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -8px 24px rgba(95, 134, 165, 0.12);
+    }
+
+    .summary-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .summary-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .copy-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(126, 180, 216, 0.25);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 92px;
+      transform: translateX(-50%) translateY(8px);
+      background: rgba(47, 61, 74, 0.95);
+      color: white;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 20;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 420px) {
+      body { padding: 10px 10px 110px; }
+      .logo { font-size: 1.4rem; }
+      .item-row { grid-template-columns: 1.15fr 0.75fr auto; }
+      .item-name { font-size: 0.9rem; }
+      .item-price { font-size: 0.84rem; }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <header class="header">
+      <h1 class="logo">𝘕𝘦𝘱𝘵𝘶𝘯𝘦 𝘉𝘢𝘬𝘦𝘳𝘺</h1白底>
+    </header>
 
-<div class="container">
+    <section class="section-card">
+      <div class="customer-form">
+        <div class="field">
+          <label for="name">稱呼</label>
+          <input id="name" type="text" placeholder="例如：小明" />
+        </div>
+        <div class="field">
+          <label for="contact">聯絡方式</label>
+          <input id="contact" type="text" placeholder="例如：0912345678"/>
+        </div>
+        <div class="field">
+          <label for="date">取貨日期</label>
+          <input id="date" type="date" />
+        </div>
+        <div class="field">
+          <label for="time">最早可取貨時間（晚到沒關係打烊前會來取就好）</label>
+          <select id="time">
+            <option value="11:00">11:00</option>
+            <option value="11:30">11:30</option>
+            <option value="12:00">12:00</option>
+            <option value="12:30">12:30</option>
+            <option value="13:00">13:00</option>
+            <option value="13:30">13:30</option>
+            <option value="14:00">14:00</option>
+            <option value="14:30">14:30</option>
+            <option value="15:00">15:00</option>
+            <option value="15:30">15:30</option>
+            <option value="16:00">16:00</option>
+            <option value="16:30">16:30</option>
+            <option value="17:00">17:00</option>
+            <option value="17:30">17:30</option>
+            <option value="18:00">18:00</option>
+            <option value="18:30">18:30</option>
+            <option value="19:00">19:00</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="notes">備註</label>
+          <textarea id="notes" placeholder="例如：司康請單獨包裝，其餘商品可一起包裝"></textarea>
+        </div>
+      </div>
+    </section>
 
-<h1> Neptune Bakery</h1>
+    <section class="section-card" id="catalog"></section>
+  </div>
 
-<div class="subtitle">
-每日新鮮出爐<br>
-日本麵粉・天然奶油・自家培養米糀酵母
-</div>
+  <div class="summary-bar">
+    <div class="summary-inner">
+      <div class="summary-text" id="summaryText">共0件・NT$0</div>
+      <button class="copy-btn" id="copyBtn" type="button">複製訂單</button>
+    </div>
+  </div>
 
-<div class="card">
+  <div class="toast" id="toast">已複製訂單</div>
 
-<a class="btn menu" href="menu.html"
-📖 今日菜單
-</a>
+  <script>
+    const catalog = [
+      {
+        title: '司康',
+        items: [
+          { name: '原味牛奶', price: 50 },
+          { name: '新鮮莓果', price: 65 },
+          { name: '燕麥蜂蜜肉桂', price: 60 },
+          { name: '蜂蜜伯爵茶', price: 60 },
+          { name: '梨山烏龍', price: 60 },
+          { name: '楓糖培根', price: 65 },
+          { name: '奶油啤酒', price: 65 },
+          { name: '奶酥蘭姆葡萄', price: 60 }
+        ]
+      },
+      {
+        title: '麵包',
+        items: [
+          { name: '蕃茄咖哩麵包', price: 70 },
+          { name: '鹽可頌', price: 40 },
+          { name: '黑糖核桃肉桂捲', price: 100 },
+          { name: '湯種鮮乳吐司（半條）', price: 75 },
+          { name: '湯種鮮乳吐司（整條）', price: 150 },
+          { name: '小餐包（單顆）', price: 22 },
+          { name: '小餐包（五入）', price: 100 },
+          { name: '芥末籽脆腸捲', price: 55 },
+          { name: '野莓貝果', price: 55 },
+          { name: '野莓乳酪貝果', price: 70 },
+          { name: '青醬香蒜起司佛卡夏', price: 50 }
+        ]
+      },
+      {
+        title: '點心',
+        items: [
+          { name: '無糖高蛋白香蕉布朗尼', price: 70 },
+          { name: '櫻桃藍莓馬芬', price: 65 },
+          { name: '蜂蜜烤地瓜巴斯克', price: 70 },
+          { name: '奶油烤年糕', price: 30 },
+          { name: '香草海鹽費南雪', price: 42 }
+        ]
+      },
+      {
+        title: '抹醬',
+        items: [
+          { name: '自製低糖莓果醬 60g', price: 65 },
+          { name: '藍莓乳酪醬 60g', price: 70 },
+          { name: '鮮奶油 60g', price: 65 }
+        ]
+      }
+    ];
 
-<a class="btn order" href="order.html">
-🛒 立即訂購
-</a>
+    const catalogEl = document.getElementById('catalog');
+    const summaryText = document.getElementById('summaryText');
+    const copyBtn = document.getElementById('copyBtn');
+    const toast = document.getElementById('toast');
+    const quantities = {};
 
-<a class="btn ig" href="#">
-📷 Instagram
-</a>
+    function renderCatalog() {
+      catalogEl.innerHTML = '';
+      catalog.forEach((group, groupIndex) => {
+        const card = document.createElement('div');
+        card.className = 'category' + (groupIndex === 0 ? ' open' : '');
+        card.innerHTML = `
+          <button class="category-toggle" type="button" data-group="${groupIndex}">
+            <span>${group.title}</span>
+            <span class="chevron">⌄</span>
+          </button>
+          <div class="category-body"></div>
+        `;
+        const body = card.querySelector('.category-body');
+        group.items.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'item-row';
+          const key = `${group.title}-${item.name}`;
+          quantities[key] = quantities[key] || 0;
+          row.innerHTML = `
+            <div>
+              <div class="item-name">${item.name}</div>
+            </div>
+            <div class="item-price">${item.priceLabel || item.price}</div>
+            <div class="qty-box">
+              <button class="qty-btn" type="button" data-action="minus" data-key="${key}">−</button>
+              <span class="qty-value" data-key="${key}">${quantities[key]}</span>
+              <button class="qty-btn" type="button" data-action="plus" data-key="${key}">+</button>
+            </div>
+          `;
+          body.appendChild(row);
+        });
+        catalogEl.appendChild(card);
+      });
+    }
 
-</div>
+    function updateSummary() {
+      let totalQty = 0;
+      let totalAmount = 0;
 
-<div class="footer">
-Neptune Bakery © 2026
-</div>
+      catalog.forEach(group => {
+        group.items.forEach(item => {
+          const key = `${group.title}-${item.name}`;
+          const qty = quantities[key] || 0;
+          totalQty += qty;
+          totalAmount += qty * (item.price || 0);
+        });
+      });
 
-</div>
+      summaryText.textContent = `共${totalQty}件・NT$${totalAmount}`;
+    }
 
+    function updateQuantity(key, delta) {
+      quantities[key] = Math.max(0, (quantities[key] || 0) + delta);
+      const el = document.querySelector(`.qty-value[data-key="${key}"]`);
+      if (el) el.textContent = quantities[key];
+      updateSummary();
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 1400);
+    }
+
+    function buildOrderText() {
+      const name = document.getElementById('name').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      const notes = document.getElementById('notes').value.trim();
+
+      let lines = [];
+      lines.push('NEPTUNE BAKERY');
+      lines.push('');
+      lines.push(`稱呼：${name}`);
+      lines.push(`聯絡方式：${contact}`);
+      lines.push(`取貨日期：${date}`);
+      lines.push(`取貨時間：${time}`);
+      lines.push(`備註：${notes}`);
+      lines.push('');
+
+      let totalQty = 0;
+      let totalAmount = 0;
+
+      catalog.forEach(group => {
+        const selected = group.items.filter(item => (quantities[`${group.title}-${item.name}`] || 0) > 0);
+        if (selected.length) {
+          lines.push(`【${group.title}】`);
+          selected.forEach(item => {
+            const qty = quantities[`${group.title}-${item.name}`] || 0;
+            totalQty += qty;
+            totalAmount += qty * item.price;
+            lines.push(`${item.name} x${qty}`);
+          });
+          lines.push('');
+        }
+      });
+
+      lines.push(`共${totalQty}件`);
+      lines.push(`NT$${totalAmount}`);
+      return lines.join('\n');
+    }
+
+    document.addEventListener('click', (event) => {
+      const toggle = event.target.closest('.category-toggle');
+      if (toggle) {
+        const card = toggle.closest('.category');
+        card.classList.toggle('open');
+        return;
+      }
+
+      const btn = event.target.closest('.qty-btn');
+      if (btn) {
+        const key = btn.getAttribute('data-key');
+        const action = btn.getAttribute('data-action');
+        updateQuantity(key, action === 'plus' ? 1 : -1);
+      }
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const text = buildOrderText();
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const area = document.createElement('textarea');
+          area.value = text;
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand('copy');
+          document.body.removeChild(area);
+        }
+        showToast('已複製訂單');
+      } catch (error) {
+        showToast('複製失敗，請手動複製');
+      }
+    });
+
+    renderCatalog();
+    updateSummary();
+
+    const today = new Date();
+    const dateInput = document.getElementById('date');
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    dateInput.value = `${yyyy}-${mm}-${dd}`;
+  </script>
 </body>
 </html>
